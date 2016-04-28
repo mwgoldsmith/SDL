@@ -41,48 +41,62 @@
  *  Some compilers use a special export keyword
  */
 #ifndef DECLSPEC
-//# if defined(__BEOS__) || defined(__HAIKU__)
-//#  if defined(__GNUC__)
-//#   define DECLSPEC
-//#  else
-//#   define DECLSPEC	__declspec(export)
-//#  endif
-//# elif defined(__WIN32__)
-//#  ifdef __BORLANDC__
-//#   ifdef BUILD_SDL
-//#    define DECLSPEC 
-//#   else
-//#    define DECLSPEC	__declspec(dllimport)
-//#   endif
-//#  else
-#   define DECLSPEC	extern
-//#  endif
-//# elif defined(__OS2__)
-//#  ifdef __WATCOMC__
-//#   ifdef BUILD_SDL
-//#    define DECLSPEC	__declspec(dllexport)
-//#   else
-//#    define DECLSPEC
-//#   endif
-//#  elif defined (__GNUC__) && __GNUC__ < 4
-//#   /* Added support for GCC-EMX <v4.x */
-//#   /* this is needed for XFree86/OS2 developement */
-//#   /* F. Ambacher(anakor@snafu.de) 05.2008 */
-//#   ifdef BUILD_SDL
-//#    define DECLSPEC    __declspec(dllexport)
-//#   else
-//#    define DECLSPEC
-//#   endif
-//#  else
-//#   define DECLSPEC
-//#  endif
-//# else
-//#  if defined(__GNUC__) && __GNUC__ >= 4
-//#   define DECLSPEC	__attribute__ ((visibility("default")))
-//#  else
-//#   define DECLSPEC
-//#  endif
-//# endif
+# if defined(__BEOS__) || defined(__HAIKU__)
+#   if defined(__GNUC__)
+#     define DECLSPEC
+#   else
+#     define DECLSPEC	__declspec(export)
+#   endif
+# elif defined(__WIN32__)
+#   ifdef __BORLANDC__
+#     ifdef BUILD_SDL
+#       define DECLSPEC 
+#     else
+#       define DECLSPEC	__declspec(dllimport)
+#     endif
+#   elif defined(_MSC_VER)
+#     ifdef BUILD_SDL
+#       ifdef _USRDLL
+#         define DECLSPEC	__declspec(dllexport)
+#       else
+#         define DECLSPEC extern
+#       endif
+#     else
+#       ifdef _USRDLL
+#         define DECLSPEC	__declspec(dllimport)
+#       else
+#         define DECLSPEC extern
+#       endif
+#     endif
+#   else
+#     define DECLSPEC 
+#   endif
+# elif defined(__OS2__)
+#  ifdef __WATCOMC__
+#   ifdef BUILD_SDL
+#    define DECLSPEC	__declspec(dllexport)
+#   else
+#    define DECLSPEC
+#   endif
+#  elif defined (__GNUC__) && __GNUC__ < 4
+#   /* Added support for GCC-EMX <v4.x */
+#   /* this is needed for XFree86/OS2 developement */
+#   /* F. Ambacher(anakor@snafu.de) 05.2008 */
+#   ifdef BUILD_SDL
+#    define DECLSPEC    __declspec(dllexport)
+#   else
+#    define DECLSPEC
+#   endif
+#  else
+#   define DECLSPEC
+#  endif
+# else
+#  if defined(__GNUC__) && __GNUC__ >= 4
+#   define DECLSPEC	__attribute__ ((visibility("default")))
+#  else
+#   define DECLSPEC
+#  endif
+# endif
 #endif
 
 /** 
